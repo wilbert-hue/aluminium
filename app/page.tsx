@@ -16,9 +16,23 @@ function dashboardSubtitleFromSheets(sheets: CmiSheetModel[]): string {
   return 'Fused Magnesia Buyers'
 }
 
+function PageTitleAndDemoNote() {
+  return (
+    <div className="mb-5 flex flex-col items-stretch gap-2">
+      <h2 className="text-xl font-bold text-gray-900">
+        Customer Intelligence Database
+      </h2>
+      <p className="w-full text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5 text-left">
+        <span className="font-semibold">NOTE:</span> All the data in the
+        dashboard is demo data. No real world data is related to this.
+      </p>
+    </div>
+  )
+}
+
 function headerCellClass(cell: CmiHeaderCell): string {
   const base =
-    'border border-black px-2 py-2 text-left align-middle text-gray-900 leading-snug'
+    'border border-black px-2 py-2 text-center align-middle text-gray-900 leading-snug'
   if (cell.variant === 'sno') return `${base} bg-[#f9e79f] font-semibold`
   if (cell.variant === 'leaf')
     return `${base} bg-[#e8f5e9] text-xs font-semibold`
@@ -41,17 +55,13 @@ function CmiPropositionBlock({ sheet }: { sheet: CmiSheetModel }) {
         <ChevronDown className="h-5 w-5 shrink-0 text-gray-600 transition-transform group-open:rotate-180" />
       </summary>
 
-      <div className="p-4 bg-gray-100">
+      <div className="p-3 sm:p-4 bg-gray-100">
         {!hasTable ? (
           <p className="text-sm text-gray-600">No table structure in this sheet.</p>
         ) : (
-          <div className="overflow-x-auto rounded-md border border-gray-300 bg-white">
-            {/*
-              Flex column with w-max + min-w-full: width follows the wide table (p3)
-              so the blue banner stretches to the same width when horizontal scroll is needed.
-            */}
-            <div className="flex w-max min-w-full flex-col">
-              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-right text-white">
+          <div className="w-full overflow-x-auto rounded-md border border-gray-300 bg-white">
+            <div className="flex w-full min-w-0 flex-col">
+              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-right text-white w-full">
                 <div className="text-sm font-semibold leading-tight">
                   {sheet.banner.title}
                 </div>
@@ -62,12 +72,16 @@ function CmiPropositionBlock({ sheet }: { sheet: CmiSheetModel }) {
                 ) : null}
               </div>
               {sheet.headerStripTitle ? (
-                <div className="shrink-0 border-x border-b border-black bg-[#e8f5e9] px-4 py-2 text-right text-sm font-semibold text-gray-900">
+                <div className="shrink-0 w-full border-x border-b border-black bg-[#e8f5e9] px-4 py-2 text-right text-sm font-semibold text-gray-900">
                   {sheet.headerStripTitle}
                 </div>
               ) : null}
 
-            <table className="min-w-max border-collapse border border-black text-sm text-gray-900">
+            <table
+              className={`w-full min-w-max border-collapse border border-black text-sm text-gray-900 ${
+                sheet.headerStripTitle ? 'border-t-0' : ''
+              }`}
+            >
               <thead>
                 {sheet.headerRows.map((row, ri) => (
                   <tr key={ri}>
@@ -163,15 +177,7 @@ export default async function DashboardPage() {
       <div className="container mx-auto max-w-[1800px] px-4 py-6">
         {loadError ? (
           <div>
-            <h2 className="text-xl font-bold text-gray-900">
-              Customer Intelligence Database
-            </h2>
-            <div className="mt-2 mb-5 flex justify-end">
-              <p className="max-w-2xl text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5 text-left sm:max-w-[85%] lg:max-w-[70%]">
-                <span className="font-semibold">NOTE:</span> All the data in the
-                dashboard is demo data. No real world data is related to this.
-              </p>
-            </div>
+            <PageTitleAndDemoNote />
           <div
             className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
             role="alert"
@@ -213,19 +219,8 @@ export default async function DashboardPage() {
               </div>
             </aside>
 
-            <main className="lg:col-span-9 space-y-6">
-              <div>
-                <h2 className="text-xl font-bold text-gray-900">
-                  Customer Intelligence Database
-                </h2>
-                <div className="mt-2 mb-5 flex justify-end">
-                  <p className="max-w-2xl text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5 text-left sm:max-w-[85%] lg:max-w-[70%]">
-                    <span className="font-semibold">NOTE:</span> All the data
-                    in the dashboard is demo data. No real world data is
-                    related to this.
-                  </p>
-                </div>
-              </div>
+            <main className="lg:col-span-9 space-y-6 min-w-0 w-full">
+              <PageTitleAndDemoNote />
               {sheets.length === 0 ? (
                 <p className="text-gray-600">No proposition sheets found.</p>
               ) : (
