@@ -161,15 +161,17 @@ export default async function DashboardPage() {
       </header>
 
       <div className="container mx-auto max-w-[1800px] px-4 py-6">
-        <h2 className="text-xl font-bold text-gray-900">
-          Customer Intelligence Database
-        </h2>
-        <p className="mt-2 mb-5 text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5">
-          NOTE: All the data in the dashboard is demo data. No real world data
-          is related to this.
-        </p>
-
         {loadError ? (
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">
+              Customer Intelligence Database
+            </h2>
+            <div className="mt-2 mb-5 flex justify-end">
+              <p className="max-w-2xl text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5 text-left sm:max-w-[85%] lg:max-w-[70%]">
+                <span className="font-semibold">NOTE:</span> All the data in the
+                dashboard is demo data. No real world data is related to this.
+              </p>
+            </div>
           <div
             className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"
             role="alert"
@@ -183,6 +185,7 @@ export default async function DashboardPage() {
               </code>{' '}
               in the project root.
             </p>
+          </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
@@ -211,6 +214,18 @@ export default async function DashboardPage() {
             </aside>
 
             <main className="lg:col-span-9 space-y-6">
+              <div>
+                <h2 className="text-xl font-bold text-gray-900">
+                  Customer Intelligence Database
+                </h2>
+                <div className="mt-2 mb-5 flex justify-end">
+                  <p className="max-w-2xl text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5 text-left sm:max-w-[85%] lg:max-w-[70%]">
+                    <span className="font-semibold">NOTE:</span> All the data
+                    in the dashboard is demo data. No real world data is
+                    related to this.
+                  </p>
+                </div>
+              </div>
               {sheets.length === 0 ? (
                 <p className="text-gray-600">No proposition sheets found.</p>
               ) : (
