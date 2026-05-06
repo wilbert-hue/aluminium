@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx'
+import { applyDemoBodyRows, buildColumnHints } from './cmi-demo-data'
 
 const CMI_FILENAME = 'Demo Customer Intelligence Database_Fused Magnesia Buyers_CMI.xlsx'
 
@@ -241,7 +242,11 @@ function parseOneSheet(sheetName: string, sh: XLSX.WorkSheet): CmiSheetModel {
   const allMerges = [...baseMerges, ...synthetic]
 
   const headerRows = buildHeaderRows(sh, allMerges, maxCol)
-  const bodyRows = normalizeBody(grid as unknown[][], maxCol, DATA_START)
+  const columnHints = buildColumnHints(grid as unknown[][], maxCol)
+  const bodyRows = applyDemoBodyRows(
+    normalizeBody(grid as unknown[][], maxCol, DATA_START),
+    columnHints
+  )
 
   return {
     sheetName,
