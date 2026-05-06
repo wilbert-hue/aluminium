@@ -18,7 +18,7 @@ function dashboardSubtitleFromSheets(sheets: CmiSheetModel[]): string {
 
 function headerCellClass(cell: CmiHeaderCell): string {
   const base =
-    'border border-black px-2 py-2 text-center align-middle text-gray-900 leading-snug'
+    'border border-black px-2 py-2 text-left align-middle text-gray-900 leading-snug'
   if (cell.variant === 'sno') return `${base} bg-[#f9e79f] font-semibold`
   if (cell.variant === 'leaf')
     return `${base} bg-[#e8f5e9] text-xs font-semibold`
@@ -51,7 +51,7 @@ function CmiPropositionBlock({ sheet }: { sheet: CmiSheetModel }) {
               so the blue banner stretches to the same width when horizontal scroll is needed.
             */}
             <div className="flex w-max min-w-full flex-col">
-              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-center text-white">
+              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-right text-white">
                 <div className="text-sm font-semibold leading-tight">
                   {sheet.banner.title}
                 </div>
@@ -61,6 +61,11 @@ function CmiPropositionBlock({ sheet }: { sheet: CmiSheetModel }) {
                   </div>
                 ) : null}
               </div>
+              {sheet.headerStripTitle ? (
+                <div className="shrink-0 border-x border-b border-black bg-[#e8f5e9] px-4 py-2 text-right text-sm font-semibold text-gray-900">
+                  {sheet.headerStripTitle}
+                </div>
+              ) : null}
 
             <table className="min-w-max border-collapse border border-black text-sm text-gray-900">
               <thead>
@@ -159,7 +164,7 @@ export default async function DashboardPage() {
         <h2 className="text-xl font-bold text-gray-900">
           Customer Intelligence Database
         </h2>
-        <p className="mt-2 mb-5 max-w-4xl text-sm font-medium uppercase tracking-wide text-amber-900 bg-amber-50 border border-amber-200 rounded-md px-3 py-2.5">
+        <p className="mt-2 mb-5 text-sm font-normal normal-case leading-relaxed text-amber-950 bg-amber-50 border border-orange-200 rounded-md px-3 py-2.5">
           NOTE: All the data in the dashboard is demo data. No real world data
           is related to this.
         </p>
@@ -187,18 +192,17 @@ export default async function DashboardPage() {
                 <h2 className="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3">
                   Chart view
                 </h2>
-                <div className="rounded-lg border border-teal-200 border-l-4 border-l-teal-500 bg-cyan-50/90 p-3 shadow-sm">
+                <div className="rounded-lg border border-sky-200 border-l-[6px] border-l-teal-600 bg-sky-50/90 p-3 shadow-sm">
                   <div className="flex items-start gap-2">
                     <span className="text-lg" aria-hidden>
                       👤
                     </span>
                     <div>
-                      <div className="text-sm font-semibold text-teal-900">
+                      <div className="text-sm font-semibold text-sky-950">
                         Customer Intelligence
                       </div>
-                      <p className="mt-1 text-xs text-teal-800/90 leading-snug">
-                        Customer database with proposition tables sourced from
-                        the CMI workbook.
+                      <p className="mt-1 text-xs text-sky-900/85 leading-snug">
+                        Customer database with proposition tables.
                       </p>
                     </div>
                   </div>

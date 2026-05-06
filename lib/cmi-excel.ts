@@ -28,6 +28,8 @@ export type CmiSheetModel = {
   sheetName: string
   displayTitle: string
   banner: CmiBanner
+  /** Excel row 4 right-rail titles (e.g. Company & Facility Identification) */
+  headerStripTitle: string
   headerRows: CmiHeaderRow[]
   columnCount: number
   bodyRows: (string | number)[][]
@@ -135,7 +137,7 @@ function buildHeaderRows(
   sh: XLSX.WorkSheet,
   merges: Merge[],
   maxCol: number
-): CmiHeaderRow[] {
+): { headerRows: CmiHeaderRow[]; row4StripParts: string[] } {
   const nHeaderRows = HEADER_BOTTOM - HEADER_TOP + 1
   const cover: (CoverCell | null)[][] = Array.from({ length: nHeaderRows }, () =>
     Array<CoverCell | null>(maxCol).fill(null)
@@ -162,6 +164,7 @@ function buildHeaderRows(
   }
 
   const headerRows: CmiHeaderRow[] = []
+  const row4StripParts: string[] = []
 
   for (let ir = 0; ir < nHeaderRows; ir++) {
     const cells: CmiHeaderCell[] = []
@@ -178,6 +181,17 @@ function buildHeaderRows(
           m.s.c === 0 &&
           (text.toLowerCase().includes('s.no') ||
             text.replace(/\s/g, '').toLowerCase().includes('s.no.'))
+        /** Top Excel row wide bands → green strip above grid (matches reference UI). */
+        const isRow4FullWidthBand =
+          ir === 0 &&
+          m.s.r === HEADER_TOP &&
+          m.e.r === HEADER_TOP &&
+          m.s.c > 0 &&
+          cs > 1
+        if (isRow4FullWidthBand) {
+          if (text) row4StripParts.push(text)
+          continue
+        }
         cells.push({
           text,
           rowSpan: rs,
@@ -201,7 +215,7 @@ function buildHeaderRows(
     headerRows.push({ cells })
   }
 
-  return headerRows
+  return { headerRows, row4StripParts }
 }
 
 function normalizeBody(
@@ -241,7 +255,11 @@ function parseOneSheet(sheetName: string, sh: XLSX.WorkSheet): CmiSheetModel {
   const synthetic = syntheticHeaderMerges(sh, baseMerges, maxCol, bodyUsed)
   const allMerges = [...baseMerges, ...synthetic]
 
-  const headerRows = buildHeaderRows(sh, allMerges, maxCol)
+  const { headerRows, row4StripParts } = buildHeaderRows(sh, allMerges, maxCol)
+  const headerStripTitle =
+    row4StripParts.length > 0
+      ? row4StripParts.join(' · ')
+      : cellText(sh, HEADER_TOP, 1)
   const columnHints = buildColumnHints(grid as unknown[][], maxCol)
   const bodyRows = applyDemoBodyRows(
     normalizeBody(grid as unknown[][], maxCol, DATA_START),
@@ -252,6 +270,7 @@ function parseOneSheet(sheetName: string, sh: XLSX.WorkSheet): CmiSheetModel {
     sheetName,
     displayTitle: sheetName.trim(),
     banner: parseBanner(sh),
+    headerStripTitle,
     headerRows,
     columnCount: maxCol,
     bodyRows,
@@ -270,6 +289,7 @@ export function parseCmiWorkbookFromBuffer(buf: Buffer): CmiSheetModel[] {
         sheetName: name,
         displayTitle: name.trim(),
         banner: { title: '', subtitle: '' },
+        headerStripTitle: '',
         headerRows: [],
         columnCount: 0,
         bodyRows: [],
