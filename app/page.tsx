@@ -18,7 +18,7 @@ function dashboardSubtitleFromSheets(sheets: CmiSheetModel[]): string {
 
 function headerCellClass(cell: CmiHeaderCell): string {
   const base =
-    'border border-black px-2 py-2 text-left align-middle text-gray-900 leading-snug'
+    'border border-black px-2 py-2 text-center align-middle text-gray-900 leading-snug'
   if (cell.variant === 'sno') return `${base} bg-[#f9e79f] font-semibold`
   if (cell.variant === 'leaf')
     return `${base} bg-[#e8f5e9] text-xs font-semibold`
@@ -51,7 +51,7 @@ function CmiPropositionBlock({ sheet }: { sheet: CmiSheetModel }) {
               so the blue banner stretches to the same width when horizontal scroll is needed.
             */}
             <div className="flex w-max min-w-full flex-col">
-              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-right text-white">
+              <div className="shrink-0 bg-[#2c3e50] px-4 py-3 text-center text-white">
                 <div className="text-sm font-semibold leading-tight">
                   {sheet.banner.title}
                 </div>
@@ -156,9 +156,13 @@ export default async function DashboardPage() {
       </header>
 
       <div className="container mx-auto max-w-[1800px] px-4 py-6">
-        <h2 className="mb-5 text-xl font-bold text-gray-900">
+        <h2 className="text-xl font-bold text-gray-900">
           Customer Intelligence Database
         </h2>
+        <p className="mt-2 mb-5 max-w-4xl text-sm font-medium uppercase tracking-wide text-amber-900 bg-amber-50 border border-amber-200 rounded-md px-3 py-2.5">
+          NOTE: All the data in the dashboard is demo data. No real world data
+          is related to this.
+        </p>
 
         {loadError ? (
           <div
